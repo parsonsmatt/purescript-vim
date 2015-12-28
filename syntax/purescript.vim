@@ -10,8 +10,7 @@ if exists("b:current_syntax")
 endif
 
 syn keyword purescriptModule module
-syn keyword purescriptImport foreign import hiding
-syn region purescriptQualifiedImport start="\<qualified\>" contains=purescriptType,purescriptDot end="\<as\>"
+syn keyword purescriptImport foreign import hiding as
 syn keyword purescriptStructure data newtype type class instance derive where
 syn keyword purescriptStatement forall do case of let in
 syn keyword purescriptConditional if then else
@@ -29,7 +28,17 @@ syn region purescriptString start=+"+ skip=+\\\\\|\\"+ end=+"+
 syn region purescriptMultilineString start=+"""+ end=+"""+
 syn region purescriptBlockComment start="{-" end="-}" contains=purescriptBlockComment
 
-highlight def link purescriptImport Structure
+syn match hsIdentifier "^\k\+\ze.*\%(\n\s.*\|\n\)*[[:punct:]]\@<!=[[:punct:]]\@!"
+highlight default link hsIdentifier Identifier
+
+
+syntax match hsType
+      \ "^\(\s*\)\%(default\s\+\)\?\%(\k\+\|([^[:alnum:]]\+)\)\_s*\(::\|∷\).*\%(\n\1\s.*\)*"
+      \ contains=TOP,@Spell
+
+highlight default link hsType Type
+
+highlight def link purescriptImport Statement
 highlight def link purescriptQualifiedImport Structure
 highlight def link purescriptModule Structure
 highlight def link purescriptStructure Structure
@@ -41,7 +50,7 @@ highlight def link purescriptDelimiter Delimiter
 highlight def link purescriptInfix PreProc
 highlight def link purescriptOperators Operator
 highlight def link purescriptDot Operator
-highlight def link purescriptType Include
+" highlight def link purescriptType PreProc
 highlight def link purescriptLineComment Comment
 highlight def link purescriptBlockComment Comment
 highlight def link purescriptString String
